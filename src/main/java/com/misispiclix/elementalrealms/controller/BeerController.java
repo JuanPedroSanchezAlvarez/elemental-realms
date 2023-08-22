@@ -3,9 +3,11 @@ package com.misispiclix.elementalrealms.controller;
 import com.misispiclix.elementalrealms.dto.BeerDTO;
 import com.misispiclix.elementalrealms.service.IBeerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -26,7 +28,7 @@ public class BeerController {
 
     @GetMapping(BEER_PATH_ID)
     Mono<BeerDTO> findById(@PathVariable("id") Integer id) {
-        return beerService.findById(id);
+        return beerService.findById(id).switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
 
     @PostMapping(BEER_PATH)
@@ -51,7 +53,9 @@ public class BeerController {
 
     @DeleteMapping(BEER_PATH_ID)
     public Mono<ResponseEntity<Void>> deleteById(@PathVariable("id") Integer id, @Validated @RequestBody BeerDTO beerDTO) {
-        return beerService.deleteById(id).thenReturn(ResponseEntity.noContent().build());
+        return beerService.findById(id).switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
+                .map(beerDto -> beerService.deleteById(beerDto.getId()))
+                .thenReturn(ResponseEntity.noContent().build());
     }
 
 }
