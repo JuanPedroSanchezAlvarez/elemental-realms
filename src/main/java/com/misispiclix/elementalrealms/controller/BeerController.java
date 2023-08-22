@@ -41,17 +41,17 @@ public class BeerController {
     @PutMapping(BEER_PATH_ID)
     public ResponseEntity<Void> updateBeer(@PathVariable("id") Integer id, @Validated @RequestBody BeerDTO beerDTO) {
         beerService.updateBeer(id, beerDTO).subscribe();
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping(BEER_PATH_ID + "/2")
     public Mono<ResponseEntity<Void>> updateBeer2(@PathVariable("id") Integer id, @Validated @RequestBody BeerDTO beerDTO) {
-        return beerService.updateBeer(id, beerDTO).map(savedDto -> ResponseEntity.ok().build());
+        return beerService.updateBeer(id, beerDTO).map(savedDto -> ResponseEntity.noContent().build());
     }
 
     @DeleteMapping(BEER_PATH_ID)
     public Mono<ResponseEntity<Void>> deleteById(@PathVariable("id") Integer id, @Validated @RequestBody BeerDTO beerDTO) {
-        return beerService.deleteById(id).map(response -> ResponseEntity.noContent().build());
+        return beerService.deleteById(id).thenReturn(ResponseEntity.noContent().build());
     }
 
 }

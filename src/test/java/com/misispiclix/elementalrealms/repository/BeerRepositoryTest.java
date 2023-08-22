@@ -1,5 +1,7 @@
 package com.misispiclix.elementalrealms.repository;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.misispiclix.elementalrealms.configuration.DatabaseConfiguration;
 import com.misispiclix.elementalrealms.domain.Beer;
 import org.junit.jupiter.api.Test;
@@ -11,10 +13,17 @@ import java.math.BigDecimal;
 
 @DataR2dbcTest
 @Import(DatabaseConfiguration.class)
-class BeerRepositoryTest {
+public class BeerRepositoryTest {
 
     @Autowired
     IBeerRepository beerRepository;
+
+    @Test
+    void testCreateJson() throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        System.out.println(objectMapper.writeValueAsString(getTestBeer()));
+    }
 
     @Test
     void saveNewBeer() {
@@ -24,7 +33,7 @@ class BeerRepositoryTest {
                 });
     }
 
-    Beer getTestBeer() {
+    public static Beer getTestBeer() {
         return Beer.builder()
                 .beerName("Space Dust")
                 .beerStyle("IPA")
