@@ -27,32 +27,33 @@ public class BeerController {
     }
 
     @GetMapping(BEER_PATH_ID)
-    Mono<BeerDTO> findById(@PathVariable("id") Integer id) {
+    Mono<BeerDTO> findById(@PathVariable("id") String id) {
         return beerService.findById(id).switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
 
     @PostMapping(BEER_PATH)
     public Mono<ResponseEntity<Void>> createBeer(@Validated @RequestBody BeerDTO beerDTO) {
-        return beerService.createBeer(beerDTO)
+        /*return beerService.createBeer(beerDTO)
                 .map(savedDto -> ResponseEntity.created(UriComponentsBuilder
                         .fromHttpUrl("http://localhost:8080/" + BEER_PATH + "/" + savedDto.getId())
                         .build().toUri())
-                        .build());
+                        .build());*/
+        return null;
     }
 
     @PutMapping(BEER_PATH_ID)
-    public ResponseEntity<Void> updateBeer(@PathVariable("id") Integer id, @Validated @RequestBody BeerDTO beerDTO) {
+    public ResponseEntity<Void> updateBeer(@PathVariable("id") String id, @Validated @RequestBody BeerDTO beerDTO) {
         beerService.updateBeer(id, beerDTO).subscribe();
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping(BEER_PATH_ID + "/2")
-    public Mono<ResponseEntity<Void>> updateBeer2(@PathVariable("id") Integer id, @Validated @RequestBody BeerDTO beerDTO) {
+    public Mono<ResponseEntity<Void>> updateBeer2(@PathVariable("id") String id, @Validated @RequestBody BeerDTO beerDTO) {
         return beerService.updateBeer(id, beerDTO).map(savedDto -> ResponseEntity.noContent().build());
     }
 
     @DeleteMapping(BEER_PATH_ID)
-    public Mono<ResponseEntity<Void>> deleteById(@PathVariable("id") Integer id, @Validated @RequestBody BeerDTO beerDTO) {
+    public Mono<ResponseEntity<Void>> deleteById(@PathVariable("id") String id, @Validated @RequestBody BeerDTO beerDTO) {
         return beerService.findById(id).switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
                 .map(beerDto -> beerService.deleteById(beerDto.getId()))
                 .thenReturn(ResponseEntity.noContent().build());

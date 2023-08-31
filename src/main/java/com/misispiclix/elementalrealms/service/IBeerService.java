@@ -6,8 +6,11 @@ import reactor.core.publisher.Mono;
 
 public interface IBeerService {
     Flux<BeerDTO> findAll();
-    Mono<BeerDTO> findById(Integer id);
+    Mono<BeerDTO> findById(String id);
+    Mono<BeerDTO> createBeer(Mono<BeerDTO> beerDTO);
     Mono<BeerDTO> createBeer(BeerDTO beerDTO);
-    Mono<BeerDTO> updateBeer(Integer id, BeerDTO beerDTO);
-    Mono<Void> deleteById(Integer id);
+    Mono<BeerDTO> updateBeer(String id, BeerDTO beerDTO);
+    Mono<Void> deleteById(String id);
+    Mono<BeerDTO> findFirstByBeerName(String beerName);
+    Flux<BeerDTO> findByBeerStyle(String beerStyle);
 }

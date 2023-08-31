@@ -17,14 +17,15 @@ public class Bootstrap implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        loadBeerData();
-
-        beerRepository.count().subscribe(count -> {
-            System.out.println("Count is: " + count);
-        });
+        beerRepository.deleteAll()
+                .doOnSuccess(success -> {
+                    loadBeerData();
+                })
+                .subscribe();
     }
 
     private void loadBeerData() {
+
         beerRepository.count().subscribe(count -> {
             if (count == 0) {
                 Beer beer1 = Beer.builder()

@@ -22,8 +22,14 @@ public class BeerServiceImpl implements IBeerService {
     }
 
     @Override
-    public Mono<BeerDTO> findById(Integer id) {
+    public Mono<BeerDTO> findById(String id) {
         return beerRepository.findById(id).map(beerMapper::beerToBeerDto);
+    }
+
+    @Override
+    public Mono<BeerDTO> createBeer(Mono<BeerDTO> beerDTO) {
+        //return beerRepository.save(beerMapper.beerDtoToBeer(beerDTO)).map(beerMapper::beerToBeerDto);
+        return beerDTO.map(beerMapper::beerDtoToBeer).flatMap(beerRepository::save).map(beerMapper::beerToBeerDto);
     }
 
     @Override
@@ -32,7 +38,7 @@ public class BeerServiceImpl implements IBeerService {
     }
 
     @Override
-    public Mono<BeerDTO> updateBeer(Integer id, BeerDTO beerDTO) {
+    public Mono<BeerDTO> updateBeer(String id, BeerDTO beerDTO) {
         return beerRepository.findById(id)
                 .map(foundBeer -> {
                     //update properties
@@ -48,8 +54,18 @@ public class BeerServiceImpl implements IBeerService {
     }
 
     @Override
-    public Mono<Void> deleteById(Integer id) {
+    public Mono<Void> deleteById(String id) {
         return beerRepository.deleteById(id);
+    }
+
+    @Override
+    public Mono<BeerDTO> findFirstByBeerName(String beerName) {
+        return beerRepository.findFirstByBeerName(beerName).map(beerMapper::beerToBeerDto);
+    }
+
+    @Override
+    public Flux<BeerDTO> findByBeerStyle(String beerStyle) {
+        return beerRepository.findByBeerStyle(beerStyle).map(beerMapper::beerToBeerDto);
     }
 
 }

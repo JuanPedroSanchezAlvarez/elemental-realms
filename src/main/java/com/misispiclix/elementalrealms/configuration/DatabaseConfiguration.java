@@ -1,27 +1,32 @@
 package com.misispiclix.elementalrealms.configuration;
 
-import io.r2dbc.spi.ConnectionFactory;
-import org.springframework.beans.factory.annotation.Value;
+import com.mongodb.reactivestreams.client.MongoClient;
+import com.mongodb.reactivestreams.client.MongoClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
-import org.springframework.data.r2dbc.config.EnableR2dbcAuditing;
-import org.springframework.r2dbc.connection.init.ConnectionFactoryInitializer;
-import org.springframework.r2dbc.connection.init.ResourceDatabasePopulator;
+import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguration;
 
 @Configuration
-@EnableR2dbcAuditing
-public class DatabaseConfiguration {
+public class DatabaseConfiguration extends AbstractReactiveMongoConfiguration {
 
-    @Value("classpath:/schema.sql")
-    Resource resource;
+    @Override
+    protected String getDatabaseName() {
+        return "sfg";
+    }
 
     @Bean
-    ConnectionFactoryInitializer initializer(ConnectionFactory connectionFactory) {
-        ConnectionFactoryInitializer initializer = new ConnectionFactoryInitializer();
-        initializer.setConnectionFactory(connectionFactory);
-        initializer.setDatabasePopulator(new ResourceDatabasePopulator(resource));
-        return initializer;
+    public MongoClient mongoClient() {
+        return MongoClients.create();
     }
+
+    /*@Override
+    protected void configureClientSettings(MongoClientSettings.Builder builder) {
+        builder.credential(MongoCredential.createCredential("root", "admin", "example".toCharArray()))
+                .applyToClusterSettings(settings -> {
+                    settings.hosts((singletonList(
+                            new ServerAddress("127.0.0.1", 27017)
+                    )));
+                });
+    }*/
 
 }
