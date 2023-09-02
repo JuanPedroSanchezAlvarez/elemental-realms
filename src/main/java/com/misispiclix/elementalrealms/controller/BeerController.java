@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequiredArgsConstructor
 public class BeerController {
-
+/*
     public static final String BEER_PATH = "/api/v2/beer";
     public static final String BEER_PATH_ID = BEER_PATH + "/{id}";
 
@@ -30,17 +30,17 @@ public class BeerController {
     Mono<BeerDTO> findById(@PathVariable("id") String id) {
         return beerService.findById(id).switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
-
-    @PostMapping(BEER_PATH)
-    public Mono<ResponseEntity<Void>> createBeer(@Validated @RequestBody BeerDTO beerDTO) {
+*/
+    //@PostMapping(BEER_PATH)
+    //public Mono<ResponseEntity<Void>> createBeer(@Validated @RequestBody BeerDTO beerDTO) {
         /*return beerService.createBeer(beerDTO)
                 .map(savedDto -> ResponseEntity.created(UriComponentsBuilder
                         .fromHttpUrl("http://localhost:8080/" + BEER_PATH + "/" + savedDto.getId())
                         .build().toUri())
                         .build());*/
-        return null;
-    }
-
+     //   return null;
+    //}
+/*
     @PutMapping(BEER_PATH_ID)
     public ResponseEntity<Void> updateBeer(@PathVariable("id") String id, @Validated @RequestBody BeerDTO beerDTO) {
         beerService.updateBeer(id, beerDTO).subscribe();
@@ -58,5 +58,5 @@ public class BeerController {
                 .map(beerDto -> beerService.deleteById(beerDto.getId()))
                 .thenReturn(ResponseEntity.noContent().build());
     }
-
+*/
 }

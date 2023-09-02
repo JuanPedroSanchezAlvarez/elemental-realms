@@ -10,6 +10,7 @@ public interface IBeerService {
     Mono<BeerDTO> createBeer(Mono<BeerDTO> beerDTO);
     Mono<BeerDTO> createBeer(BeerDTO beerDTO);
     Mono<BeerDTO> updateBeer(String id, BeerDTO beerDTO);
+    Mono<BeerDTO> patchBeer(String id, BeerDTO beerDTO);
     Mono<Void> deleteById(String id);
     Mono<BeerDTO> findFirstByBeerName(String beerName);
     Flux<BeerDTO> findByBeerStyle(String beerStyle);
